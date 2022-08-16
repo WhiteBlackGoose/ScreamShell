@@ -7,6 +7,7 @@ open System.Threading
 open System.IO
 
 let font = FigletFont.Load "./colossal.flf"
+let cursorSymbol = "_"
 
 let write (color : Color) (text : string) =
     FigletText(font, text)
@@ -42,10 +43,11 @@ let rec run (): unit =
         if text <> "" then
             text <- text.Substring(0, text.Length - 1)
         Console.Clear ()
-        write Color.White $"$ {text}"
+        write Color.White $"$ {text}{cursorSymbol}"
 
     | 13 ->
-
+        Console.Clear ()
+        write Color.White $"$ {text}"
         p.StandardInput.WriteLine($"{text}\n")
         p.StandardInput.Flush ()
         text <- ""
@@ -53,10 +55,11 @@ let rec run (): unit =
     | other ->
         text <- text + key.KeyChar.ToString() 
         Console.Clear ()
-        write Color.White $"$ {text}"
+        write Color.White $"$ {text}{cursorSymbol}"
     run ()
 
 Console.Title <- "Scream Shell"
 Console.Clear ()
-write Color.White "$ "
+Console.CursorVisible <- false
+write Color.White $"$ {cursorSymbol}"
 run()
